@@ -1,0 +1,40 @@
+{
+  "name": "api_users",
+  "version": "1.0.0",
+  "description": "This Project will do CRUD for Users and authentication and authorization with NodeJs and MongoDB.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EveFer/backend_users_htj.git"
+  },
+  "keywords": [
+    "api",
+    "nodejs",
+    "mongoDB",
+    "hack-the-job",
+    "kodemia"
+  ],
+  "author": "@EveFer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EveFer/backend_users_htj/issues"
+  },
+  "homepage": "https://github.com/EveFer/backend_users_htj#readme",
+  "dependencies": {
+    "bcrypt": "^4.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.15",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "standard": "^14.3.4"
+  }
+}
