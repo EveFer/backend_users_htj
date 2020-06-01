@@ -29,7 +29,8 @@ const userSchema = new Schema({
   role: {
     type: String,
     require: true,
-    enum: ['administrator', 'user']
+    enum: ['administrator', 'user'],
+    default: 'user'
   },
   carbonFootprint: {
     type: Object,

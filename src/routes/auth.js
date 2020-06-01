@@ -10,13 +10,38 @@ ROUTER.post('/login', async (req, res) => {
     const token = await users.login(email, password)
     res.json({
       success: true,
-      token
+      data: {
+        token
+      }
     })
   } catch (error) {
     res.status(400)
     res.json({
       success: false,
-      message: error.message
+      data: {
+        message: error.message
+      }
+    })
+  }
+})
+
+ROUTER.get('/me', async (req, res) => {
+  try {
+    const { authorization: token } = req.headers
+    const user = await users.getUserByToken(token)
+    res.json({
+      success: true,
+      data: {
+        user
+      }
+    })
+  } catch (error) {
+    res.status(400)
+    res.json({
+      success: false,
+      data: {
+        message: error.message
+      }
     })
   }
 })

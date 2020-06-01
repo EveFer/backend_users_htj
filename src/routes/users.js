@@ -19,7 +19,9 @@ ROUTER.post('/', async (req, res) => {
     res.status(400)
     res.json({
       success: false,
-      error: error.message
+      data: {
+        message: error.message
+      }
     })
   }
 })
@@ -38,7 +40,9 @@ ROUTER.get('/', auth, permission('administrator'), async (req, res) => {
     res.status(400)
     res.json({
       success: false,
-      error: error.message
+      data: {
+        message: error.message
+      }
     })
   }
 })
@@ -57,7 +61,9 @@ ROUTER.get('/admins', auth, permission('administrator'), async (req, res) => {
     res.status(400)
     res.json({
       success: false,
-      error: error.message
+      data: {
+        message: error.message
+      }
     })
   }
 })
@@ -74,7 +80,9 @@ ROUTER.get('/:id', auth, permission('administrator', 'user'), async (req, res) =
     res.status(400)
     res.json({
       success: false,
-      error: 'Not found User'
+      data: {
+        message: 'Not found User'
+      }
     })
   }
 })
@@ -85,18 +93,22 @@ ROUTER.delete('/:id', auth, permission('administrator', 'user'), isOwnerAccount,
     await users.deleteById(id)
     res.json({
       success: true,
-      message: 'User deleted successfully'
+      data: {
+        message: 'User deleted successfully'
+      }
     })
   } catch (error) {
     res.status(400)
     res.json({
       success: false,
-      error: error.message
+      data: {
+        message: error.message
+      }
     })
   }
 })
 
-ROUTER.patch('/:id', auth, permission('administrator', 'user'), isOwnerAccount, async (req, res) => {
+ROUTER.patch('/:id', auth, permission('administrator', 'user'), async (req, res) => {
   try {
     const { id } = req.params
     const { body } = req
@@ -111,16 +123,18 @@ ROUTER.patch('/:id', auth, permission('administrator', 'user'), isOwnerAccount, 
     res.status(400)
     res.json({
       success: false,
-      error: error.message
+      data: {
+        message: error.message
+      }
     })
   }
 })
 
-ROUTER.post('/:id/subscription', auth, permission('administrator'), async (req, res) => {
+ROUTER.post('/:idUser/subscription', auth, permission('administrator'), async (req, res) => {
   try {
-    const { id } = req.params
+    const { idUser } = req.params
     const { body } = req
-    const subscriptionCreated = await users.addSubscription(id, body)
+    const subscriptionCreated = await users.addSubscription(idUser, body)
     res.json({
       success: true,
       data: {
@@ -131,7 +145,30 @@ ROUTER.post('/:id/subscription', auth, permission('administrator'), async (req, 
     res.status(400)
     res.json({
       success: false,
-      error: error.message
+      data: {
+        message: error.message
+      }
+    })
+  }
+})
+
+ROUTER.get('/:idUser/subscription', auth, permission('administrator', 'user'), async (req, res) => {
+  try {
+    const { idUser } = req.params
+    const subscription = await users.getSubscriptionByUser(idUser)
+    res.json({
+      success: true,
+      data: {
+        subscription
+      }
+    })
+  } catch (error) {
+    res.status(400)
+    res.json({
+      success: false,
+      data: {
+        message: 'Not found User'
+      }
     })
   }
 })
@@ -152,7 +189,9 @@ ROUTER.patch('/:idUser/subscription', auth, permission('administrator'), async (
     res.status(400)
     res.json({
       success: false,
-      error: error.message
+      data: {
+        message: error.message
+      }
     })
   }
 })

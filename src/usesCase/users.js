@@ -9,10 +9,11 @@ const User = require('../models/users')
  * @param {Object} userData - User data
 */
 async function signUp (userData) {
-  const { email, password } = userData
+  const { email, password, confirmationPassword } = userData
   if (!email) throw new Error('Email address is required')
   if (!password) throw new Error('Password is required')
   if (password.length < 8) throw new Error('Password must be at greater than 8 characters')
+  if (password !== confirmationPassword) throw new Error('Password is not matches')
 
   const userAlreadyExists = await User.findOne({ email: email })
 
@@ -43,7 +44,14 @@ async function login (email, password) {
  * @param {String} id - id of user
  */
 function getById (id) {
-  return User.findById(id).select('name lastName email role carbonFootprint subscription')
+  return User.findById(id).select('name lastName email role carbonFootprint subscription carbonFootprint')
+}
+
+function getUserByToken (token) {
+  if (!token) throw new Error('token is required')
+  const tokenDecode = jwt.verify(token)
+  const { id } = tokenDecode
+  return User.findOne({ _id: id }).select('name lastName email role subscription carbonFootprint')
 }
 
 function getAllUsers (userCurrent) {
@@ -51,7 +59,7 @@ function getAllUsers (userCurrent) {
 }
 
 function getAllAdmins (userCurrent) {
-  return User.find({ _id: { $ne: userCurrent }, role: { $ne: 'user' } }).select('name lastName email role')
+  return User.find({ _id: { $ne: userCurrent }, role: { $ne: 'user' } }).select('name lastName email role subscription')
 }
 
 /**
@@ -88,6 +96,20 @@ async function addSubscription (idUser, SubscriptionData) {
   return userAlreadyExists.save()
 }
 
+/**
+ *
+ * @param {String} idUser - id of user
+ * Return subscription by user id
+ */
+function getSubscriptionByUser (idUser) {
+  return User.findById(idUser).select('subscription')
+}
+
+/**
+ *
+ * @param {String} idUser - id of user
+ * @param {Object} newSubscriptionData - new subscription data
+ */
 async function updateSubscription (idUser, newSubscriptionData) {
   const userAlreadyExists = await User.findById(idUser)
 
@@ -107,5 +129,7 @@ module.exports = {
   updateById,
   addSubscription,
   updateSubscription,
-  login
+  getSubscriptionByUser,
+  login,
+  getUserByToken
 }

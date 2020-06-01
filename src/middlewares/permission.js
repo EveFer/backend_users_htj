@@ -9,7 +9,9 @@ function permission (...allowedRole) {
       res.status(403)
       res.json({
         success: false,
-        message: 'Forbidden, This user is not permitted to access'
+        data: {
+          message: 'Forbidden, This user is not permitted to access'
+        }
       })
     }
   }
