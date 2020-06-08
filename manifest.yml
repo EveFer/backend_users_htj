@@ -1,0 +1,5 @@
+applications:
+- name: api-toroto
+  random-route: false
+  memory: 128M
+  stack: cflinuxfs3
